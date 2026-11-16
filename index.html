@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BaKitwe Market V3 - All Shops in Kitwe</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f7f7f7}
+.ads-bar{background:#FFD500;padding:10px;text-align:center;font-weight:900;position:sticky;top:0;z-index:100}
+.ads-bar small{display:block;font-weight:400;font-size:12px}
+header{background:#008751;color:#fff;padding:16px;text-align:center}
+.logo{width:85px;height:85px;background:#FFD500;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;border:4px solid #fff}
+.logo-inner{background:#008751;width:65px;height:65px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+header h1{font-size:28px} header h1 b{color:#FFD500}
+.loc-box{background:#fff;margin:12px;padding:14px;border-radius:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.loc-box button{background:#008751;color:#fff;border:0;padding:12px 20px;border-radius:25px;font-weight:900}
+.search{padding:0 12px}.search input{width:100%;padding:15px;border-radius:25px;border:2px solid #008751;font-size:15px}
+.search p{font-size:12px;color:#666;text-align:center;margin-top:6px}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px}.cats button{white-space:nowrap;padding:8px 14px;border-radius:20px;border:1px solid #008751;background:#fff;color:#008751;font-weight:700}.cats button.active{background:#008751;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px}
+.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card img{width:100%;height:100px;object-fit:cover}.card-body{padding:10px}.card-body h3{font-size:14px}.card-body p{font-size:12px;color:#666}
+.price{color:#008751;font-weight:900}
+.time-box{background:#FFF8D6;border:1px solid #FFD500;border-radius:10px;padding:8px;margin-top:8px;font-size:12px;line-height:1.5}
+.btn{display:block;text-align:center;background:#25D366;color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-weight:800;margin-top:8px;font-size:13px}
+.btn2{display:block;text-align:center;background:#008751;color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-weight:800;margin-top:6px;font-size:13px}
+.google-card{background:#fff;margin:12px;border:2px dashed #008751;border-radius:14px;padding:16px;text-align:center;display:none}
+.google-card button{background:#008751;color:#fff;border:0;padding:12px 18px;border-radius:25px;font-weight:900;margin-top:10px}
+.map-box{background:#fff;margin:12px;border-radius:14px;overflow:hidden}.map-box h3{padding:12px}.map-box iframe{width:100%;height:320px;border:0}
+.add-shop{background:#111;color:#fff;margin:12px;padding:16px;border-radius:14px;text-align:center}.add-shop h2{color:#FFD500}.add-shop a{display:inline-block;margin-top:10px;background:#25D366;color:#fff;padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:900}
+footer{text-align:center;padding:18px;font-size:12px;color:#888}
+</style>
+</head>
+<body>
+<div class="ads-bar">📢 ADVERTISE HERE<small>WhatsApp 0771491210</small></div>
+<header><div class="logo"><div class="logo-inner"><span>🛒</span><b>BK</b></div></div><h1>BA<b>KITWE</b> MARKET</h1><p>Soko Yatu, Pa Phone Yatu • Kitwe 🇿🇲</p><p style="font-size:11px;background:#FFD500;color:#000;display:inline-block;padding:4px 10px;border-radius:20px;font-weight:900;margin-top:8px">V3 • ALL SHOPS IN KITWE • SEARCH ANY SHOP</p></header>
+
+<div class="loc-box"><h3>📍 Where Are You?</h3><p id="locText">Tap to get time to reach every shop.</p><button onclick="getLocation()">📍 Use My Location</button></div>
+
+<div class="search"><input type="text" id="searchInput" placeholder="🔍 Search ANY shop in Kitwe... Pick n Pay, Shoprite, KFC, Bata..." onkeyup="filterShops()"><p>Try: Pick n Pay • Shoprite • Hungry Lion • KFC • Chisokone • Pep • Bata • Wusakile</p></div>
+<div class="cats"><button class="active" onclick="filterCat('all',this)">All</button><button onclick="filterCat('food',this)">🍅 Food / Supermarket</button><button onclick="filterCat('fashion',this)">👗 Fashion</button><button onclick="filterCat('phone',this)">📱 Phones</button><button onclick="filterCat('eat',this)">🍔 Eat</button><button onclick="filterCat('market',this)">🛍️ Market</button></div>
+
+<div id="googleCard" class="google-card">
+<h3>🔍 Not in our list yet?</h3><p id="googleText">We will find it on Google Maps for you.</p>
+<button onclick="searchGoogle()">🌍 Search on Google Maps in Kitwe →</button>
+<button onclick="directionsGoogle()" style="background:#FFD500;color:#000">🗺️ Get Directions to it →</button>
+<p style="font-size:11px;margin-top:8px">This shows ANY shop that is on Google Maps in Kitwe.</p>
+</div>
+
+<div class="grid" id="shopGrid">
+<!-- I will put 24 shops here - Kitwe's biggest -->
+</div>
+
+<div class="map-box"><h3>🗺️ Live Map - All Shops in Kitwe</h3><iframe id="mapFrame" src="https://www.openstreetmap.org/export/embed.html?bbox=28.1500%2C-12.9500%2C28.3200%2C-12.7500&layer=mapnik&marker=-12.8445%2C28.2255"></iframe><p style="padding:0 12px 12px;font-size:13px">Use search above for any shop. If not listed, we open Google Maps.</p></div>
+<div class="add-shop"><h2>Have A Shop in Kitwe?</h2><p>Join V3. Customers will find you by searching.</p><a href="https://wa.me/260771491210?text=Hi!%20I%20want%20to%20ADD%20MY%20SHOP%20to%20V3">+ Add My Shop — FREE</a></div>
+<footer>BaKitwe Market V3 © 2026 • Made in Kitwe • 0771491210 • Kimz Cadmas</footer>
+
+<script>
+let userLat=-12.8445, userLng=28.2255;
+let shops=[
+["Pick n Pay - Mukuba Mall","Mukuba Mall, Kitwe","food","Groceries • Supermarket",-12.8205,28.2120,"https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=600"],
+["Shoprite - Kitwe","Town Centre, Kitwe","food","Groceries • Supermarket",-12.8320,28.2150,"https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=600"],
+["Choppies - Kitwe","Chisokone Rd, Kitwe","food","Groceries • Low Prices",-12.8450,28.2300,"https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=600"],
+["Chisokone Market","Chisokone, Kitwe","market","Tomatoes, Chitenge, Everything",-12.8435,28.2245,"https://images.unsplash.com/photo-1542838132-92c53300491e?w=600"],
+["Mama Chisokone Tomatoes","Chisokone Market","food","K25 / Meda Tomatoes",-12.8435,28.2245,"https://images.unsplash.com/photo-1542838132-92c53300491e?w=600"],
+["Hungry Lion - Kitwe","Town Centre, Kitwe","eat","Chicken & Chips",-12.8310,28.2130,"https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=600"],
+["KFC Kitwe","Mukuba Mall, Kitwe","eat","Fried Chicken",-12.8205,28.2120,"https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=600"],
+["Debonairs Pizza Kitwe","Town Centre, Kitwe","eat","Pizza",-12.8330,28.2160,"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600"],
+["Chicken Village Kitwe","Nkana East, Kitwe","food","K85 Village Chicken",-12.8100,28.2500,"https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=600"],
+["Pep Stores Kitwe","Town Centre, Kitwe","fashion","Cheap Clothes",-12.8340,28.2140,"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"],
+["Ackermans Kitwe","Mukuba Mall, Kitwe","fashion","Clothes",-12.8205,28.2120,"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"],
+["Jet Kitwe","Town Centre, Kitwe","fashion","Clothes & Shoes",-12.8325,28.2155,"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"],
+["Bata Kitwe","Town Centre, Kitwe","fashion","Shoes",-12.8335,28.2165,"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"],
+["Kitwe Fashion House","Town Centre, Kitwe","fashion","K150 Chitenge",-12.8300,28.2100,"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"],
+["BaKitwe Phone Shop","Matuka, Kitwe","phone","K120 Charger",-12.8600,28.2350,"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600"],
+["Game Stores Kitwe","Mukuba Mall, Kitwe","phone","Electronics",-12.8205,28.2120,"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600"],
+["Mukuba Mall","Mukuba, Kitwe","market","All Shops in One Mall",-12.8205,28.2120,"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600"],
+["Nkana Market","Nkana, Kitwe","market","Fresh Food",-12.8150,28.2400,"https://images.unsplash.com/photo-1542838132-92c53300491e?w=600"],
+["Wusakile Market","Wusakile, Kitwe","market","Local Market",-12.8700,28.2600,"https://images.unsplash.com/photo-1542838132-92c53300491e?w=600"],
+["Mindolo Market","Mindolo, Kitwe","market","Local Market",-12.8700,28.2000,"https://images.unsplash.com/photo-1542838132-92c53300491e?w=600"],
+["Copperhill Mall","Copperhill, Kitwe","market","Shops & Food",-12.8000,28.2200,"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600"],
+["Kitwe Car Wash & Spares","Industrial Area, Kitwe","market","K100 Full Wash",-12.8500,28.2700,"https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=600"],
+["Glow Beauty Salon","Copperhill, Kitwe","fashion","K180 Hair + Makeup",-12.8000,28.2200,"https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600"],
+["Edgars Kitwe","Mukuba Mall, Kitwe","fashion","Fashion",-12.8205,28.2120,"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600"],
+];
+let grid=document.getElementById('shopGrid');
+function render(){
+  grid.innerHTML='';
+  shops.forEach(s=>{
+    let d=calcDist(userLat,userLng,s[4],s[5]);
+    let walk=Math.max(1,Math.round(d/5*60)), bike=Math.max(1,Math.round(d/15*60)), taxi=Math.max(2,Math.round(d/30*60)+2);
+    let div=document.createElement('div'); div.className='card'; div.dataset.cat=s[2]; div.dataset.name=s[0].toLowerCase()+' '+s[1].toLowerCase(); div.dataset.lat=s[4]; div.dataset.lng=s[5]; div.dataset.dist=d;
+    div.innerHTML=`<img src="${s[6]}"><div class="card-body"><h3>${s[0]}</h3><p>📍 ${s[1]}</p><div class="price">${s[3]}</div><div class="time-box">⏱️ <b>${d.toFixed(1)} km away</b><br>🚶 ${walk} mins walk • 🚕 ${taxi} mins taxi • 🚲 ${bike} mins bike</div><a class="btn" href="https://wa.me/260771491210?text=Hi!%20I%20want%20${encodeURIComponent(s[0])}">Order on WhatsApp</a><a class="btn2" href="#" onclick="goTo(this);return false">🗺️ Get Directions →</a></div>`;
+    grid.appendChild(div);
+  });
+  sortGrid();
+}
+function sortGrid(){let cards=[...grid.children].sort((a,b)=>parseFloat(a.dataset.dist)-parseFloat(b.dataset.dist)); cards.forEach(c=>grid.appendChild(c));}
+function calcDist(lat1,lon1,lat2,lon2){let R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;let a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
+function getLocation(){document.getElementById('locText').innerText="Finding you..."; if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{userLat=p.coords.latitude;userLng=p.coords.longitude;document.getElementById('locText').innerText="✅ Location found! Times are from YOU.";render();},()=>{document.getElementById('locText').innerText="Using Kitwe Centre.";render();});}}
+function filterShops(){
+  let q=document.getElementById('searchInput').value.toLowerCase().trim();
+  let found=0;
+  document.querySelectorAll('.card').forEach(c=>{let show=c.dataset.name.includes(q);c.style.display=show?'block':'none'; if(show) found++;});
+  let g=document.getElementById('googleCard');
+  if(q.length>2 && found===0){g.style.display='block'; document.getElementById('googleText').innerText=`"${document.getElementById('searchInput').value}" not in our 24 shops — but we will find it on Google Maps for you.`;}
+  else if(q.length>2 && found>0){g.style.display='none';}
+  else g.style.display='none';
+}
+function filterCat(cat,btn){document.querySelectorAll('.cats button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'block':'none';});}
+function goTo(el){let card=el.closest('.card');window.open('https://www.google.com/maps/dir/?api=1&origin='+userLat+','+userLng+'&destination='+card.dataset.lat+','+card.dataset.lng+'&travelmode=walking','_blank');}
+function searchGoogle(){let q=document.getElementById('searchInput').value; window.open('https://www.google.com/maps/search/'+encodeURIComponent(q+' in Kitwe, Zambia'),'_blank');}
+function directionsGoogle(){let q=document.getElementById('searchInput').value; window.open('https://www.google.com/maps/dir/?api=1&origin='+userLat+','+userLng+'&destination='+encodeURIComponent(q+' in Kitwe, Zambia'),' _blank');}
+render();
+</script>
+</body>
+</html>
